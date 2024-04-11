@@ -12,12 +12,12 @@ import Analysis from './navigation/Analysis';
 const Tab = createBottomTabNavigator();
 
 export default function MainTabs() {
+  const tabBarHeight = 80;
   return (
-    <View style={{flex: 1}}>
-      <NavigationContainer>
         <Tab.Navigator initialRouteName="Home" screenOptions={{
           tabBarShowLabel: false,
-          tabBarStyle: {backgroundColor: '#181818'}
+          headerShown: false,
+          tabBarStyle: {backgroundColor: '#181818', position: 'absolute', height: tabBarHeight}
         }}>
              <Tab.Screen name="Home" component={Home} 
                         options={{
@@ -39,8 +39,7 @@ export default function MainTabs() {
                         }}/>
             
         </Tab.Navigator>
-      </NavigationContainer>
-    </View>
+      
   )
 }
 
