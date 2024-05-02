@@ -5,19 +5,35 @@ import { Colors } from '../constants/Colors';
 import { Font} from '../constants/Font';
 
 const {width, height} = Dimensions.get('screen');
-
+type EntypoIconName = "emoji-happy" | "emoji-neutral" | "emoji-sad";
 export default function Home() {
 
-  const result: any[] = [];
-  const [dateBoxes, setDateBoxes] = useState(result);
+  const [dateBoxes, setDateBoxes] = useState([]);
   const [emojiSelection, setEmoji] = useState(false);
-  const [selectedEmoji, setSelectedEmoji] = useState(null);
+  const [selectedEmoji, setSelectedEmoji] = useState<EntypoIconName>('emoji-happy');
+  const [selectedDateIndex, setSelectedDateIndex] = useState<number>(null);
 
-  const handleEmojiSelection = () => setEmoji(() => !emojiSelection);
+  const handleEmojiSelection = (index) => {
+    setSelectedDateIndex(index);
+    setEmoji(true);
+  };
 
   const handleEmojiClick = (emojiName) => {
+    const newDateBoxes = [...dateBoxes];
+    const updatedDateBox =  (
+      <View style={styles.dateContainer} key={selectedDateIndex}>
+        <View style={styles.dateBox}>
+          <Text style={styles.dateText}>{formatDate(new Date())}</Text>
+        </View>
+        <TouchableOpacity onPress={() => handleEmojiSelection(selectedDateIndex)}>
+          <Entypo name={emojiName} size={26} color={emojiName === 'emoji-happy' ? Colors.lime : (emojiName === 'emoji-neutral' ? Colors.purple : Colors.lovelyred)} style={styles.emoji} />
+        </TouchableOpacity>
+      </View>
+    );
+    newDateBoxes[selectedDateIndex] = updatedDateBox;
+    setDateBoxes(newDateBoxes);
     setSelectedEmoji(emojiName);
-    setEmoji(true);
+    setEmoji(false);
   };
 
   useEffect(() => {
@@ -31,13 +47,13 @@ export default function Home() {
         const formattedDate = formatDate(date);
         boxes.push(
           <View style={styles.dateContainer} key={i}>
-            <View style={styles.dateBox}>
-              <Text style={styles.dateText}>{formattedDate}</Text>
-            </View>
-            <TouchableOpacity onPress={handleEmojiSelection}>
-              <Entypo name="emoji-happy" size={26} color={selectedEmoji ? (selectedEmoji === 'emoji-happy' ? Colors.lime : (selectedEmoji === 'emoji-neutral' ? Colors.purple : Colors.lovelyred)) : Colors.secondary} style={styles.emoji} />
-            </TouchableOpacity>
-        </View>
+              <View style={styles.dateBox}>
+                <Text style={styles.dateText}>{formattedDate}</Text>
+              </View>
+              <TouchableOpacity onPress={() => handleEmojiSelection(i)}>
+                <Entypo name={selectedEmoji} size={26} color={Colors.secondary} style={styles.emoji} />
+              </TouchableOpacity>
+          </View>
         );
       }
       return boxes;
@@ -57,18 +73,31 @@ export default function Home() {
 
 
   return (
-    <View style={{flex:1, backgroundColor: '#121212'}}>
+    <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{flex:1, backgroundColor: '#121212', }}>
       <SafeAreaView style={{flex:0, height: 100}}>
         <View style ={styles.containerBox}>
           <Text style={styles.mainText}>Hi, Evergreen!</Text>
         </View>
       </SafeAreaView>
-      <ScrollView horizontal={true} alwaysBounceHorizontal={true} style={styles.calendarContainer}>
-        <View style={{flexDirection: 'row'}}>
-          {dateBoxes}
+      <View style={{flex:1}}>
+        <View style={{height:170}}>
+          <ScrollView horizontal={true} alwaysBounceHorizontal={true} style={styles.calendarContainer} 
+                      showsHorizontalScrollIndicator={false}>
+            <View style={{flexDirection: 'row'}}>
+              {dateBoxes}
+            </View>
+          </ScrollView>
         </View>
-
-      </ScrollView>
+        <View style={styles.dailyContainer}>
+          <Text style ={styles.mainText}>Daily Check-in</Text>
+          <TouchableOpacity>
+            <Entypo name="plus" size={24} color= {Colors.secondary} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.todoContainer}>
+          <Text style={styles.mainText}>To-Do List</Text>
+        </View>
+      </View>
       <Modal
         transparent={true}
         animationType="none"
@@ -98,7 +127,12 @@ export default function Home() {
           </View>
         </View>
       </Modal>
-    </View>
+      
+
+
+      
+      
+    </ScrollView>
   )
 }
 
@@ -116,12 +150,13 @@ const styles = StyleSheet.create({
       marginTop: 10,
     },
     calendarContainer:{
-      height: 100,
+      height: 50,
       marginVertical: 10,
       marginTop: 15,
     },
     dateContainer: {
       alignItems: 'center',
+      height: 30,
     },
     dateBox: {
       borderColor: Colors.secondary ,
@@ -155,5 +190,21 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       height: height*0.35,
       width: width*0.80,
+    },
+    dailyContainer:{
+      flexDirection:'row',
+      justifyContent: 'space-between',
+      alignContent: 'center',
+      width: '100%',
+      paddingHorizontal: 10,
+      height: 200
+    },
+    todoContainer:{
+      flexDirection:'row',
+      justifyContent: 'space-between',
+      alignItems:'center',
+      alignContent: 'center',
+      width: '100%',
+      paddingHorizontal: 10,
     }
 })
