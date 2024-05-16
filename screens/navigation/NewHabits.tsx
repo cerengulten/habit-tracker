@@ -2,10 +2,14 @@ import { View, Text, SafeAreaView, ScrollView, StyleSheet, FlatList, TouchableOp
 import React from 'react';
 import { Colors } from 'C:/Users/crnyl/Desktop/ReactNativeProjects/habit-tracker/constants/Colors';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Emoji } from 'emoji-mart';
+import { useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackNavigatorParamsList} from 'C:/Users/crnyl/Desktop/ReactNativeProjects/habit-tracker/App';
+
 
 
 export default function NewHabits() {
+  const navigation = useNavigation<StackNavigationProp<RootStackNavigatorParamsList>>();
   const habitsData =[
     {id:'1', emoji: '🤸🏻‍♂️', title: 'Do Exercise'},
     {id: '2', emoji: '🥗', title: 'Eat Healthy'},
@@ -16,9 +20,9 @@ export default function NewHabits() {
     {id: '7', emoji: '🧹', title: 'Cleaning'},
   ];
 
-  const HabitListItem = ({emoji, title}) =>(
+  const HabitListItem =({emoji, title}) =>(
     
-      <TouchableOpacity style={styles.habitlistContainer}>
+      <TouchableOpacity style={styles.habitlistContainer} onPress={() => navigation.navigate('HabitFrequency', {emoji, title})}>
         <Text style={{fontSize: 30, paddingBottom: 5, paddingRight: 10}}>{emoji}</Text>
         <Text style={{fontFamily: 'mainfont', color: Colors.secondary, fontSize: 20,paddingBottom: 5}}>{title}</Text>
       </TouchableOpacity>

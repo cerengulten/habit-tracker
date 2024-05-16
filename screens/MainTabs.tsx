@@ -24,7 +24,7 @@ export default function MainTabs() {
                           tabBarIcon:({focused,}) =>
                             <Entypo name="home" size={24} color={focused ? '#B2FD42' : '#B3B3B3'} />
                         }}/>
-            <Tab.Screen name="NewHabis" component={NewHabits} 
+            <Tab.Screen name="NewHabits" component={NewHabits} 
                         options={{
                           tabBarIcon:({focused,}) =>
                             <Entypo name="add-to-list" size={24} color={focused ? '#B2FD42' : '#B3B3B3'} />
