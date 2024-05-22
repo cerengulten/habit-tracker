@@ -8,7 +8,7 @@ import HabitFrequency from './screens/HabitFrequency';
 
 export type RootStackNavigatorParamsList = {
   MainTabs: undefined;
-  HabitFrequency: { emoji: string; title: string };
+  HabitFrequency: { emoji: string; title: string, backgroundImage: any };
   
 };
 

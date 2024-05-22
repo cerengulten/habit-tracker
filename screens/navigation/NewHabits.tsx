@@ -5,24 +5,31 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackNavigatorParamsList} from 'C:/Users/crnyl/Desktop/ReactNativeProjects/habit-tracker/App';
-
-
+ // images
+import Gym from '../../assets/images/Gym.jpeg';
+import Eating from '../../assets/images/healthyeating.jpeg';
+import Meditation from '../../assets/images/meditation.jpeg';
+import Journal from '../../assets/images/journaling.jpeg';
+import Reading from '../../assets/images/reading.jpeg';
+import Skincare from '../../assets/images/skincare.jpeg';
+import Cleaning from '../../assets/images/cleaning.jpeg';
+ 
 
 export default function NewHabits() {
   const navigation = useNavigation<StackNavigationProp<RootStackNavigatorParamsList>>();
   const habitsData =[
-    {id:'1', emoji: '🤸🏻‍♂️', title: 'Do Exercise'},
-    {id: '2', emoji: '🥗', title: 'Eat Healthy'},
-    {id: '3', emoji: '🧘🏻‍♀️', title: 'Meditation'},
-    {id: '4', emoji: '📓', title: 'Journaling'},
-    {id: '5', emoji: '📚', title: 'Reading'},
-    {id: '6', emoji: '🧴', title: 'Skincare Routine'},
-    {id: '7', emoji: '🧹', title: 'Cleaning'},
+    {id:'1', emoji: '🤸🏻‍♂️', title: 'Do Exercise', backgroundImage: Gym },
+    {id: '2', emoji: '🥗', title: 'Eat Healthy', backgroundImage: Eating},
+    {id: '3', emoji: '🧘🏻‍♀️', title: 'Meditation', backgroundImage: Meditation},
+    {id: '4', emoji: '📓', title: 'Journaling', backgroundImage: Journal},
+    {id: '5', emoji: '📚', title: 'Reading', backgroundImage: Reading},
+    {id: '6', emoji: '🧴', title: 'Skincare Routine', backgroundImage: Skincare},
+    {id: '7', emoji: '🧹', title: 'Cleaning', backgroundImage: Cleaning},
   ];
 
-  const HabitListItem =({emoji, title}) =>(
+  const HabitListItem =({emoji, title, backgroundImage}) =>(
     
-      <TouchableOpacity style={styles.habitlistContainer} onPress={() => navigation.navigate('HabitFrequency', {emoji, title})}>
+      <TouchableOpacity style={styles.habitlistContainer} onPress={() => navigation.navigate('HabitFrequency', {emoji, title, backgroundImage})}>
         <Text style={{fontSize: 30, paddingBottom: 5, paddingRight: 10}}>{emoji}</Text>
         <Text style={{fontFamily: 'mainfont', color: Colors.secondary, fontSize: 20,paddingBottom: 5}}>{title}</Text>
       </TouchableOpacity>
@@ -39,7 +46,7 @@ export default function NewHabits() {
       </TouchableOpacity>
       
         <FlatList data = {habitsData} 
-                  renderItem ={({item}) => <HabitListItem title={item.title} emoji={item.emoji}/>} 
+                  renderItem ={({item}) => <HabitListItem title={item.title} emoji={item.emoji} backgroundImage={item.backgroundImage}/>} 
                   keyExtractor={item => item.id}  />
       
     </View>

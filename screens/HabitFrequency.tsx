@@ -1,16 +1,18 @@
-import { View, Text, StyleSheet, SafeAreaView, Dimensions, TouchableOpacity, Switch, Button } from 'react-native'
+import { View, Text, StyleSheet, SafeAreaView, Dimensions, TouchableOpacity, Switch, Button, ImageBackground } from 'react-native'
 import React, {useState} from 'react'
 import { Colors } from 'C:/Users/crnyl/Desktop/ReactNativeProjects/habit-tracker/constants/Colors';
 import { useRoute } from '@react-navigation/native'; 
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Ionicons } from '@expo/vector-icons';
 
-const daysOfWeek = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+const daysOfWeek = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 const {width, height} = Dimensions.get('screen');
 export default function HabitFrequency({ route }) {
-  const { emoji, title } = route.params;
+  const { emoji, title, backgroundImage } = route.params;
   const [isEnabled, setIsEnabled] = useState(false);
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
+  const [selectedDays, setSelectedDays] = useState([]);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const onChange = (event, selectedDate) => {
@@ -18,11 +20,23 @@ export default function HabitFrequency({ route }) {
     setShow(false);
     setDate(currentDate);
   };
+  const toggleDay = (day) => {
+    setSelectedDays((prevDays) =>
+      prevDays.includes(day)
+        ? prevDays.filter((d) => d !== day)
+        : [...prevDays, day]
+    );
+  };
 
 
   return (
-    <View style={{flex:1, backgroundColor: '#121212'}}>
-      <View style={{flexDirection: 'row', alignSelf: 'center', justifyContent: 'center',marginTop: 100, width: width*0.9}}>
+    <View style={{flex:1, }}>
+     <ImageBackground source={backgroundImage} resizeMode="cover" style={styles.backgroundImage}>
+     <View style={styles.overlay} />
+     <TouchableOpacity style={styles.settings}>
+      <Ionicons name="settings-sharp" size={24} color="white" />
+     </TouchableOpacity>
+      <View style={{flexDirection: 'row', alignSelf: 'center', justifyContent: 'center',marginTop: 80, width: width*0.9}}>
         <Text style={styles.mainText}>{emoji}</Text>
         <Text style={styles.mainText}>{title}</Text>
       </View>
@@ -32,11 +46,21 @@ export default function HabitFrequency({ route }) {
           <View style={styles.periodicityContainer}>
             <Text style={styles.habitboxsubTitle}>Set periodicity</Text>
             <View style={styles.weekCircles}>
-            {daysOfWeek.map((day, index) => (
-              <TouchableOpacity key={index} style={styles.dayCircle}>
-                <Text>{day}</Text>
-              </TouchableOpacity>
-            ))}
+            {daysOfWeek.map((day, index) => {
+                  const isSelected = selectedDays.includes(day);
+                  return (
+                    <TouchableOpacity
+                      key={index}
+                      style={[
+                        styles.dayCircle,
+                        isSelected && { backgroundColor: Colors.purple }
+                      ]}
+                      onPress={() => toggleDay(day)}
+                    >
+                      <Text style={{ color: isSelected ? 'white' : 'black' }}>{day}</Text>
+                    </TouchableOpacity>
+                  );
+                })}
             </View>
           </View>
           <View style={styles.reminderContainer}>
@@ -64,11 +88,26 @@ export default function HabitFrequency({ route }) {
         </View>
         
       </View>
+      </ImageBackground>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // dark overlay with 50% opacity
+  },
+  settings:{
+   position: 'absolute',
+   top: 50,
+   right: 30,
+   zIndex: 1,
+  },
   mainText:{
     marginLeft: 20,
     marginTop: 10,
