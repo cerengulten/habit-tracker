@@ -4,6 +4,7 @@ import { Colors } from 'C:/Users/crnyl/Desktop/ReactNativeProjects/habit-tracker
 import { useRoute } from '@react-navigation/native'; 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 
 const daysOfWeek = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 const {width, height} = Dimensions.get('screen');
@@ -13,6 +14,8 @@ export default function HabitFrequency({ route }) {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [selectedDays, setSelectedDays] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
+
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const onChange = (event, selectedDate) => {
@@ -27,13 +30,24 @@ export default function HabitFrequency({ route }) {
         : [...prevDays, day]
     );
   };
+  const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: false,
+      quality: 1,
+    });
 
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+      
+    } 
+  };
+  const imageSource = selectedImage  ? { uri: selectedImage } : backgroundImage;
 
   return (
     <View style={{flex:1, }}>
-     <ImageBackground source={backgroundImage} resizeMode="cover" style={styles.backgroundImage}>
+     <ImageBackground source={imageSource} resizeMode="cover" style={styles.backgroundImage}>
      <View style={styles.overlay} />
-     <TouchableOpacity style={styles.settings}>
+     <TouchableOpacity onPress={pickImageAsync} style={styles.settings}>
       <Ionicons name="settings-sharp" size={24} color="white" />
      </TouchableOpacity>
       <View style={{flexDirection: 'row', alignSelf: 'center', justifyContent: 'center',marginTop: 80, width: width*0.9}}>

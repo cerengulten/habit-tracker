@@ -40,7 +40,7 @@ export default function NewHabits() {
       <SafeAreaView>
         <Text style={styles.mainText}>Habits</Text>
       </SafeAreaView>
-      <TouchableOpacity style={styles.customizehabitContainer}>
+      <TouchableOpacity style={styles.customizehabitContainer} onPress={() => navigation.navigate('CustomHabit')}>
         <Text style={styles.customizehabitButton}>Customize Your New Habit</Text>
         <MaterialIcons name="playlist-add" size={24} color='#404040' />
       </TouchableOpacity>
